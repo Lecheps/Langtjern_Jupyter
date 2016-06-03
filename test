@@ -1,0 +1,38 @@
+import pandas as pd, os, glob
+import matplotlib.pyplot as plt
+import pylab as pl
+from read_parameters import loadLimits
+
+
+flow_file=r"C:\Users\PERSIST\Langtjern_20150331_MartynF\JL_test\useMe_1973.obs"
+flow_data = pd.read_csv(flow_file,'\t',header=2,nrows=14698,names=['fecha','caudal'],index_col='fecha')
+flow_data.index = pd.date_range('10-5-1973', periods=14698, freq='D')
+flow_data.caudal = flow_data.caudal*1000
+
+rain_file=r"C:\Users\PERSIST\Langtjern_20150331_MartynF\JL_test\UseMe.dat"
+rain_data = pd.read_csv(rain_file,'\t',header=2,nrows=14636,names=['p','t'])
+rain_data.index = pd.date_range('1/1/1970', periods=14636, freq='D')
+
+bounds = loadLimits('Behavioral_limits_NSE250k.txt')
+bounds = bounds.multiply(1000)
+
+w_start = '1982/1/1'
+w_end =  '1984/12/31'
+fig = plt.figure()
+ax1 = fig.add_subplot(111)
+
+ax1.plot(flow_data[w_start:w_end].index,flow_data[w_start:w_end].caudal)
+sub = bounds[w_start:w_end]
+ax1.fill_between(sub.index,sub['quant:0.025'],sub['quant:0.975'],facecolor='grey',edgecolor='none')
+
+ax2 = ax1.twinx()
+temp=rain_data[w_start:w_end]
+ax2.bar(temp.index,temp['p'],color='red',alpha=0.5,edgecolor='none')
+ax2.get_xaxis().set_ticks([])
+ax2.invert_yaxis()
+ax2.yaxis.tick_right()
+
+print(rain_data.t)
+
+
+plt.show()
