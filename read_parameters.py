@@ -75,4 +75,29 @@ def loadLimits(filename):
     return(df)
 
 
+def readMARS(filename):
+    with open(filename) as f:
+        content=f.readlines()
+     
+    paramNum = np.array([])
+    relativeRanking = np.array([])
+    
+    for idx,i in enumerate(content[1:]):
+        temp = StringIO(i.rstrip()) 
+        temp = np.loadtxt(temp)
+        if idx%3 == 0:
+            paramNum = np.hstack([paramNum,temp]) if paramNum.size else temp
+        elif idx%3 == 1:
+            relativeRanking = np.hstack([relativeRanking,temp]) if relativeRanking.size else temp
+            
+    return(paramNum,relativeRanking)
+                
+            
+        
+        
+
+
+
+
+
 
