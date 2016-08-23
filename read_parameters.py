@@ -95,7 +95,7 @@ def readMARS(filename):
             
         
 def saveDottyPlot(pathStr,objFunStr,imgFormat):
-    fig = pl.rcParams['figure.figsize'] = (10,20)
+    fig = pl.rcParams['figure.figsize'] = (10,15)
     filePath = pathStr + "behavioralParameters_" + objFunStr + ".txt"
     (names,values) = loadPerformance(filePath)
     performance=values[:,0]
@@ -109,7 +109,7 @@ def saveDottyPlot(pathStr,objFunStr,imgFormat):
         idx = idx + 1
 
     plt.tight_layout()
-    plt.savefig(objFunStr + imgFormat, dpi = 400)
+    plt.savefig(objFunStr + imgFormat, dpi = 400,bbox_inches='tight')
     plt.close()
 
 
