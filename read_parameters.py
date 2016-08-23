@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import datetime
 import pylab as pl
+import matplotlib.pyplot as plt
 from io import StringIO
 
 def loadPerformance(filename) :
@@ -10,7 +11,7 @@ def loadPerformance(filename) :
     with open(filename) as f :
         content = f.readlines()
 
-    paramRE = re.compile('^[a-z]+:[a-z_]+:[a-z_]+$', re.IGNORECASE)
+    paramRE = re.compile('^[a-z_]+:[a-z_]+', re.IGNORECASE)
     colonRE = re.compile(':')
     csvRE = re.compile('^-?[0-9.]+(,-?[0-9.])+');
 
@@ -19,9 +20,8 @@ def loadPerformance(filename) :
     values = []
     for i in content:
         if paramRE.match(i) is not None:
-            #print(i)
             temp = colonRE.split(i);
-            temp[2] = temp[2].rstrip()
+            temp[1] = temp[1].rstrip()
             paramArray.append(temp)
         if csvRE.match(i) is not None:
             temp = StringIO(i.rstrip())
@@ -94,7 +94,24 @@ def readMARS(filename):
                 
             
         
-        
+def saveDottyPlot(pathStr,objFunStr,imgFormat):
+    fig = pl.rcParams['figure.figsize'] = (10,20)
+    filePath = pathStr + "behavioralParameters_" + objFunStr + ".txt"
+    (names,values) = loadPerformance(filePath)
+    performance=values[:,0]
+    numCol = len(names)
+    idx = 0
+    for column in values[:, 1:].T:
+        plt.subplot(6,3,idx+1)
+        plt.plot(column,performance,'k.',MarkerSize=3)
+        plt.xlabel(names[idx][0] + ':' + names[idx][1])
+        plt.ylabel(objFunStr)
+        idx = idx + 1
+
+    plt.tight_layout()
+    plt.savefig(objFunStr + imgFormat, dpi = 400)
+    plt.close()
+
 
 
 
