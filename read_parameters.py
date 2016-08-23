@@ -102,7 +102,7 @@ def saveDottyPlot(pathStr,objFunStr,imgFormat):
     numCol = len(names)
     idx = 0
     for column in values[:, 1:].T:
-        plt.subplot(6,3,idx+1)
+        plt.subplot(4,3,idx+1)
         plt.plot(column,performance,'k.',MarkerSize=3)
         plt.xlabel(names[idx][0] + ':' + names[idx][1])
         plt.ylabel(objFunStr)
