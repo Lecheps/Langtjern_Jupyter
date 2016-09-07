@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import datetime
 import pylab as pl
+import matplotlib
 import matplotlib.pyplot as plt
 from io import StringIO
 
@@ -74,7 +75,6 @@ def loadLimits(filename):
     df = pd.DataFrame(data=values, index=fechas, columns=('quant:' + s for s in quantiles.astype(str) ))
     return(df)
 
-
 def readMARS(filename):
     with open(filename) as f:
         content=f.readlines()
@@ -92,8 +92,6 @@ def readMARS(filename):
             
     return(paramNum,relativeRanking)
                 
-            
-        
 def saveDottyPlot(pathStr,objFunStr,imgFormat):
     fig = pl.rcParams['figure.figsize'] = (10,15)
     filePath = pathStr + "behavioralParameters_" + objFunStr + ".txt"
@@ -129,7 +127,18 @@ def plotMultiobjective(pathStr,objFunStr,imgFormat):
     plt.savefig(objFunStr + imgFormat, dpi = 400,bbox_inches='tight')
     plt.close()
 
-
-
+def plotQAndIncaInput(pathStr,objFunStr,imgFormat):
+    matplotlib.style.use('ggplot')
+    pl.rcParams['figure.figsize'] = (10, 12.5)
+    completePath = pathStr + "uncertainBounds_" + objFunStr + ".txt"
+    persistOut = pd.read_csv(completePath,',',header=1,nrows=10866,names=['fecha','discharge','inca1','inca2'],index_col='fecha')
+    persistOut.index = pd.date_range('01-11-1984', periods=10866, freq='D')
+    fig, ax = plt.subplots(nrows=3)
+    persistOut.plot(title="Discharge (m3/s)",ax=ax[0],color='blue',y='discharge')
+    persistOut.plot(title="Inca input 1",ax=ax[1],color='blue',y='inca1')
+    persistOut.plot(title="Inca input 2",ax=ax[2],color='blue',y='inca2')
+    fig.savefig(objFunStr + "_inca" + imgFormat, dpi=400, bbox_inches='tight')
+    plt.close()
+    return (persistOut)
 
 
