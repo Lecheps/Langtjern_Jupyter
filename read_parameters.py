@@ -112,7 +112,22 @@ def saveDottyPlot(pathStr,objFunStr,imgFormat):
     plt.savefig(objFunStr + imgFormat, dpi = 400,bbox_inches='tight')
     plt.close()
 
-
+def plotMultiobjective(pathStr,objFunStr,imgFormat):
+    plt.figure(figsize=(2,2)) 
+    filePath = pathStr + "behavioralParameters_" + objFunStr + ".txt"
+    (names,values) = loadPerformance(filePath)
+    values = [s for s in values if len(s) == 12]
+    values = np.array(values)
+    NSE=values[:,0]
+    MME=values[:,1]
+    plt.plot(MME,NSE,'b.',MarkerSize=1.5)
+    plt.xlabel("MME",fontsize=3)
+    plt.ylabel("NSE",fontsize=3)
+    plt.tick_params(axis='both', which='major', labelsize=3)
+    plt.tick_params(axis='both', which='minor', labelsize=3)
+    plt.tight_layout()
+    plt.savefig(objFunStr + imgFormat, dpi = 400,bbox_inches='tight')
+    plt.close()
 
 
 
