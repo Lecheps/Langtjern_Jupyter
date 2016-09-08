@@ -132,7 +132,7 @@ def plotQAndIncaInput(pathStr,objFunStr,imgFormat):
     pl.rcParams['figure.figsize'] = (10, 12.5)
     completePath = pathStr + "uncertainBounds_" + objFunStr + ".txt"
     persistOut = pd.read_csv(completePath,',',header=1,nrows=10866,names=['fecha','discharge','inca1','inca2'],index_col='fecha')
-    persistOut.index = pd.date_range('01-11-1984', periods=10866, freq='D')
+    persistOut.index = pd.to_datetime(persistOut.index)
     fig, ax = plt.subplots(nrows=3)
     persistOut.plot(title="Discharge (m3/s)",ax=ax[0],color='blue',y='discharge')
     persistOut.plot(title="Inca input 1",ax=ax[1],color='blue',y='inca1')
